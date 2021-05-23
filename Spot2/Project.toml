@@ -1,0 +1,7 @@
+name = "Spot2"
+uuid = "dcdc4a92-4c41-44f9-bce4-828def10bdf4"
+authors = ["maxime "]
+version = "0.1.0"
+
+[deps]
+CxxWrap = "1f15a43c-97ca-5a2a-ae31-89f07a497df4"
