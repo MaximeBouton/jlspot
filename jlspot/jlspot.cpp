@@ -11,7 +11,7 @@
 
 JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
 {
-  // mod.add_type<spot::formula>("Formula");
+  mod.add_type<spot::formula>("Formula");
   mod.method("parse_formula", spot::parse_formula);
   // mod.append_function
     // .method("ap", [] (spot::formula& f, const std::string& name) {f.ap(name); });

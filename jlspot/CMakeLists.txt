@@ -12,11 +12,11 @@ get_target_property(JlCxx_location JlCxx::cxxwrap_julia LOCATION)
 get_filename_component(JlCxx_location ${JlCxx_location} DIRECTORY)
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${JlCxx_location}")
 
-add_library(jlspot SHARED jlspot.cpp)
+add_library(jlspot SHARED "jlspot.cpp")
 
-target_include_directories(jlspot PUBLIC "/home/maxime/spot-2.9.6/", "/home/maxime/spot-2.9.6/buddy/src")
+target_include_directories(jlspot PUBLIC "${CMAKE_SOURCE_DIR}/../spot-build/include")
 
-target_link_libraries(jlspot JlCxx::cxxwrap_julia JlCxx::cxxwrap_julia_stl)
+target_link_libraries(jlspot JlCxx::cxxwrap_julia JlCxx::cxxwrap_julia_stl "${CMAKE_SOURCE_DIR}/../spot-build/lib/libspot.so")
 
 install(TARGETS jlspot
         ARCHIVE DESTINATION lib
