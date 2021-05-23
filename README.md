@@ -23,4 +23,13 @@ There should be a `.so` in `spot-2.9.7/spot/.libs/`.
 
 ### Step 2: Setup a cxxwrap project 
 
-Follow this tutorial
+Follow this [tutorial](https://www.youtube.com/watch?v=VoXmXtqLhdo), the source files for the tutorial are here:
+https://github.com/barche/cxxwrap-juliacon2020 
+
+Setup a cmake environment in vscode
+
+Create jlspot folder with two files: 
+- CMakelists.txt contains the build instruction
+- jlspot.cpp: contains the cpp code with the function to expose
+
+Use the libfoo template for the CMakelists.txt file, add the include directories `spot-build/include` and link `libspot.so`. 

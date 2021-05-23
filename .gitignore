@@ -1,1 +1,8 @@
 build/
+spot-build/
+*.o 
+*.lo 
+*.la
+spot-2.9.7/**/.libs
+spot-2.9.7/**/.deps
+spot-2.9.7/**/.pc

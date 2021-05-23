@@ -7,6 +7,6 @@ function __init__()
     @initcxx
 end
 
-export Formula, parse_formula
+export Formula, parse_formula, is_eventual, is_ltl_formula
 
 end
