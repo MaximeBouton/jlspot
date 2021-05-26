@@ -33,3 +33,19 @@ Create jlspot folder with two files:
 - jlspot.cpp: contains the cpp code with the function to expose
 
 Use the libfoo template for the CMakelists.txt file, add the include directories `spot-build/include` and link `libspot.so`. 
+
+### Step 3: BinaryBuilder 
+
+Package everything in binary builder
+
+```bash
+# Override compiler ID to silence the horrible "No features found" cmake error
+if [[ $target == *"apple-darwin"* ]]; then
+  macos_extra_flags="-DCMAKE_CXX_COMPILER_ID=AppleClang -DCMAKE_CXX_COMPILER_VERSION=10.0.0 -DCMAKE_CXX_STANDARD_COMPUTED_DEFAULT=11"
+fi
+Julia_PREFIX=$prefix
+mkdir build
+cd build
+cmake -DJulia_PREFIX=$Julia_PREFIX -DCMAKE_FIND_ROOT_PATH=$prefix -DJlCxx_DIR=$prefix/lib/cmake/JlCxx -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TARGET_TOOLCHAIN} $macos_extra_flags -DCMAKE_BUILD_TYPE=Release ../jlspot/
+VERBOSE=ON cmake --build . --config Release --target install -- -j${nproc}
+```
