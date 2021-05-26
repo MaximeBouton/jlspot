@@ -4,7 +4,7 @@ Wrapping [Spot]() using CxxWrap.jl
 
 - `spot-2.9.7/`: contains the original spot c++ source files 
 - `jlspot/`: the cxxwrap c++ files to expose the functions to Julia. 
-- `Spot2/`: a trivial julia package to test the expose functions, this is only for debugging, it will be replaced by a new versino of Spot.jl once it works.
+- `Spot2/`: a trivial julia package to test the exposed functions, this is only for debugging, it will be replaced by a new versino of Spot.jl once it works.
 
 ## How is this done
 
@@ -31,6 +31,9 @@ Setup a cmake environment in vscode
 Create jlspot folder with two files: 
 - CMakelists.txt contains the build instruction
 - jlspot.cpp: contains the cpp code with the function to expose
+
+To wrap overloaded functions man must use c++ lambdas or `static_cast`. 
+
 
 Use the libfoo template for the CMakelists.txt file, add the include directories `spot-build/include` and link `libspot.so`. 
 
