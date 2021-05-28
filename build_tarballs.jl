@@ -4,19 +4,22 @@ using BinaryBuilder, Pkg
 
 name = "jlspot"
 version = v"2.9.7"
+julia_version = v"1.6.0"
 
 # Collection of sources required to complete build
 sources = [
-    GitSource("https://github.com/MaximeBouton/jlspot.git", "01329dd9b54e8a0e3f68298c6078c2453f8382cd")
-]
-
-# Bash recipe for building across all platforms
+    GitSource("https://github.com/MaximeBouton/jlspot.git", "37374524da9f6b4f334ef1f9d40100d19a3e5e1c")
+    ]
+    
+    # Bash recipe for building across all platforms
 script = raw"""
 cd $WORKSPACE/srcdir
-cd jlspot/spot-2.9.7/
+install_license jlspot/LICENSE.md
 
+cd jlspot/spot-2.9.7/
+    
 ./configure --prefix=${prefix}/spot-build --build=${MACHTYPE} --host=${target} --disable-python 
-make -j4 && make install
+make -j${nproc} && make install
 
 # build with cmake 
 cd $WORKSPACE/srcdir/jlspot/jlspot
@@ -24,7 +27,7 @@ cd $WORKSPACE/srcdir/jlspot/jlspot
 # "/home/maxime/cxxwrap-test/libcxxwrap-julia-build"
 
 # edit the CMAKE script to find spot-build
-sed -i 's#\${CMAKE_SOURCE_DIR}/../spot-build/#\${prefix}/spot-build/#g' CMakeLists.txt
+sed -i 's#\${CMAKE_SOURCE_DIR}/../spot-build/#\${CMAKE_INSTALL_PREFIX}/spot-build/#g' CMakeLists.txt
 
 
 # Override compiler ID to silence the horrible "No features found" cmake error
@@ -45,7 +48,18 @@ exit
 # platforms are passed in on the command line
 platforms = [
     Platform("x86_64", "linux"; libc = "glibc")
+    # Platform("x86_64", "windows"),
+    # Platform("x86_64", "macos")
 ]
+platforms = expand_cxxstring_abis(platforms)
+
+# # uncomment when pushing to yggdrasil
+# # These are the platforms we will build for by default, unless further
+# # platforms are passed in on the command line
+# include("../../L/libjulia/common.jl")
+# platforms = libjulia_platforms(julia_version)
+# platforms = filter!(!Sys.iswindows, platforms) # Singular does not support Windows
+# platforms = expand_cxxstring_abis(platforms)
 
 
 # The products that we will ensure are always built
@@ -67,13 +81,14 @@ products = [
     LibraryProduct("libbddx", :libbddx, "spot-build/lib"),
     LibraryProduct("libspotltsmin", :libspotltsmin, "spot-build/lib"),
     ExecutableProduct("randltl", :randltl, "spot-build/bin"),
-    ExecutableProduct("dstar2tgba", :dstar2tgba, "spot-build/bin")
+    ExecutableProduct("dstar2tgba", :dstar2tgba, "spot-build/bin"),
+    LibraryProduct("libjlspot", :libjlspot, "lib")
 ]
 
 # Dependencies that must be installed before this package can be built
 dependencies = [
     Dependency("libcxxwrap_julia_jll"),
-    BuildDependency(PackageSpec(name="Julia_jll"))
+    BuildDependency(PackageSpec(name="libjulia_jll", version=julia_version))
 ]
 
 # Build the tarballs, and possibly a `build.jl` as well.
