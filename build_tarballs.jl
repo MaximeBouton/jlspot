@@ -8,21 +8,22 @@ julia_version = v"1.6.0"
 
 # Collection of sources required to complete build
 sources = [
+    ArchiveSource("http://www.lrde.epita.fr/dload/spot/spot-2.9.7.tar.gz","1eea67e3446cdbbbb705ee6e26fd869020cdb7d82c563fead9cb4394b9baa04c"),
     GitSource("https://github.com/MaximeBouton/jlspot.git", "37374524da9f6b4f334ef1f9d40100d19a3e5e1c")
     ]
     
     # Bash recipe for building across all platforms
 script = raw"""
 cd $WORKSPACE/srcdir
-install_license jlspot/LICENSE.md
-
-cd jlspot/spot-2.9.7/
-    
-./configure --prefix=${prefix}/spot-build --build=${MACHTYPE} --host=${target} --disable-python 
+cd spot-2.9.7/
+# make sure pdf is older than .tex to not trigger latexmk during build 
+# touch doc/tl/tl.tex
+# touch doc/tl/tl.pdf
+./configure --prefix=${prefix}/spot-build --build=${MACHTYPE} --host=${target} --disable-python
 make -j${nproc} && make install
 
 # build with cmake 
-cd $WORKSPACE/srcdir/jlspot/jlspot
+cd $WORKSPACE/srcdir/jlspot/spot-julia
 # edit the CMAKE script to find libcxxwrap 
 # "/home/maxime/cxxwrap-test/libcxxwrap-julia-build"
 
@@ -40,6 +41,7 @@ cd build
 cmake -DJulia_PREFIX=$Julia_PREFIX -DCMAKE_FIND_ROOT_PATH=$prefix -DJlCxx_DIR=$prefix/lib/cmake/JlCxx -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TARGET_TOOLCHAIN} $macos_extra_flags -DCMAKE_BUILD_TYPE=Release ../
 VERBOSE=ON cmake --build . --config Release --target install -- -j${nproc}
 
+install_license $WORKSPACE/srcdir/jlspot/LICENSE.md
 
 exit
 """
@@ -82,7 +84,7 @@ products = [
     LibraryProduct("libspotltsmin", :libspotltsmin, "spot-build/lib"),
     ExecutableProduct("randltl", :randltl, "spot-build/bin"),
     ExecutableProduct("dstar2tgba", :dstar2tgba, "spot-build/bin"),
-    LibraryProduct("libjlspot", :libjlspot, "lib")
+    LibraryProduct("libspot_julia", :libspot_julia, "lib")
 ]
 
 # Dependencies that must be installed before this package can be built
