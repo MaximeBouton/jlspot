@@ -9,7 +9,7 @@ julia_version = v"1.6.0"
 # Collection of sources required to complete build
 sources = [
     ArchiveSource("http://www.lrde.epita.fr/dload/spot/spot-2.9.7.tar.gz","1eea67e3446cdbbbb705ee6e26fd869020cdb7d82c563fead9cb4394b9baa04c"),
-    GitSource("https://github.com/MaximeBouton/jlspot.git", "37374524da9f6b4f334ef1f9d40100d19a3e5e1c")
+    GitSource("https://github.com/MaximeBouton/jlspot.git", "db47fb1b69b7c0e28690c0635fc9eb36c41debe3")
     ]
     
     # Bash recipe for building across all platforms
