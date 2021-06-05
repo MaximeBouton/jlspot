@@ -14,12 +14,13 @@ get_filename_component(JlCxx_location ${JlCxx_location} DIRECTORY)
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${JlCxx_location}")
 
 find_library(SPOT_LIB spot)
+find_library(BDD_LIB bddx)
 
 add_library(spot_julia SHARED "spot_julia.cpp")
 
 target_include_directories(spot_julia PUBLIC "${CMAKE_SOURCE_DIR}/../spot-build/include")
 
-target_link_libraries(spot_julia JlCxx::cxxwrap_julia JlCxx::cxxwrap_julia_stl "${SPOT_LIB}")
+target_link_libraries(spot_julia JlCxx::cxxwrap_julia JlCxx::cxxwrap_julia_stl "${SPOT_LIB}" "${BDD_LIB}")
 
 install(TARGETS spot_julia
         ARCHIVE DESTINATION lib
