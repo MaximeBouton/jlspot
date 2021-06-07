@@ -6,7 +6,8 @@ set(CMAKE_MACOSX_RPATH 1)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
 list(APPEND CMAKE_PREFIX_PATH "/home/maxime/cxxwrap-test/libcxxwrap-julia-build")
-list(APPEND CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/../spot-build/lib/")
+list(APPEND CMAKE_PREFIX_PATH "${CMAKE_SPOT_DIR}/lib/")
+MESSAGE("${CMAKE_PREFIX_PATH}")
 
 find_package(JlCxx)
 get_target_property(JlCxx_location JlCxx::cxxwrap_julia LOCATION)
@@ -22,7 +23,7 @@ MESSAGE("Found bddx library at: ${BDDX_LIB}")
 
 add_library(spot_julia SHARED "spot_julia.cpp")
 
-target_include_directories(spot_julia PUBLIC "${CMAKE_SOURCE_DIR}/../spot-build/include")
+target_include_directories(spot_julia PUBLIC "${CMAKE_SPOT_DIR}/include")
 
 target_link_libraries(spot_julia JlCxx::cxxwrap_julia JlCxx::cxxwrap_julia_stl "${SPOT_LIB}" "${BDDX_LIB}")
 
